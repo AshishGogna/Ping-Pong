@@ -55,7 +55,7 @@ world.setup = function()
 
 world.reset = function()
 {
-    //location.reload();
+    location.reload();
 }
 
 var bars = {
@@ -71,15 +71,14 @@ var ball = {
 	y: windowHeight/2-(10/2),
 	dx: 9,
 	dy: 9,
-	hitX:0,
-	hitY:0
 }
 
 var particles = {
 
     circles:[],
 	r: 2,
-	alpha: 1.0
+	alpha: 1.0,
+	intensity: 1
 }
 
 function moveObjects()
@@ -142,17 +141,17 @@ function detectCollision()
 		if (Math.abs(ball.dx) < 17)
 		{
 			if (ball.dx > 0)
-				ball.dx = ball.dx+0.1;
+				ball.dx = ball.dx+0.2;
 			else
-				ball.dx = ball.dx-0.1;
+				ball.dx = ball.dx-0.2;
 		}
 
 		if (Math.abs(ball.dy) < 17)
 		{
 			if (ball.dy > 0)
-				ball.dy = ball.dy+0.1;
+				ball.dy = ball.dy+0.2;
 			else
-				ball.dy = ball.dy-0.1;
+				ball.dy = ball.dy-0.2;
 		}
 
 		if (particles.circles.length == 0)
@@ -197,8 +196,11 @@ function burstEffect(x, y)
 		particles.alpha = 1.0;
 	}
 	else
-		particles.alpha = particles.alpha - 0.07;
+	{
+		particles.alpha = particles.alpha - (0.07);
 
+		console.log(particles.alpha);
+	}
 
 	ctx.fillStyle = "rgba(59, 68, 75," + particles.alpha + ")";
 
@@ -206,10 +208,21 @@ function burstEffect(x, y)
 	{
 		var circle = particles.circles[i];
 
-		if (ball.x > windowWidth/2)
-			circle[0] -= 0.3;
-		else if (ball.x < windowWidth/2)
-			circle[0] += 0.3;
+		if (i < 10)
+		{
+			if (ball.x > windowWidth/2)
+				circle[0] -= 0.6;
+			else if (ball.x < windowWidth/2)
+				circle[0] += 0.6;
+		}
+		else
+		{
+			if (ball.x > windowWidth/2)
+				circle[0] -= 0.2;
+			else if (ball.x < windowWidth/2)
+				circle[0] += 0.2;
+		}
+
 
 		if (ball.dy < 0)
 			circle[1] -= 0.3;
