@@ -58,12 +58,14 @@ world.reset = function()
     location.reload();
 }
 
+//The bars
 var bars = {
 
 	leftBar: [0, windowHeight/2-(150/2), 10, 150],
 	rightBar: [windowWidth-10, windowHeight/2-(150/2), 10, 150]
 }
 
+//The ball
 var ball = {
 
 	r: 10,
@@ -73,12 +75,23 @@ var ball = {
 	dy: 9,
 }
 
+//The particles
 var particles = {
 
     circles:[],
 	r: 2,
 	alpha: 1.0,
 	intensity: 1
+}
+
+//The levels
+//Only one block
+var levels = {
+
+	lastLevel: 1,
+	currentLevel: 1,
+	//0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+	levels: [[], [windowWidth/2-(5), windowHeight/2-(bars.leftBar[3]/2), 10, bars.leftBar[3]/2]]
 }
 
 function moveObjects()
@@ -141,22 +154,24 @@ function detectCollision()
 		if (Math.abs(ball.dx) < 17)
 		{
 			if (ball.dx > 0)
-				ball.dx = ball.dx+0.2;
+				ball.dx = ball.dx+0.3;
 			else
-				ball.dx = ball.dx-0.2;
+				ball.dx = ball.dx-0.3;
 		}
 
 		if (Math.abs(ball.dy) < 17)
 		{
 			if (ball.dy > 0)
-				ball.dy = ball.dy+0.2;
+				ball.dy = ball.dy+0.3;
 			else
-				ball.dy = ball.dy-0.2;
+				ball.dy = ball.dy-0.3;
 		}
 
-		if (particles.circles.length == 0)
-			burstEffect(ball.x, ball.y);
+		//if (particles.circles.length == 0)
+			//burstEffect(ball.x, ball.y);
 	}
+
+	//Ball and obstacles collision
 
 	//Ball's out
 	else if (ball.x > windowWidth || ball.x < 0)
@@ -164,6 +179,21 @@ function detectCollision()
 
 	if (particles.circles.length > 0)
 		burstEffect();
+
+	if (score>0 && score%2 == 0)
+	{
+		levels.currentLevel++;
+
+		console.log(levels.currentLevel);
+		paintLevels(levels.levels[levels.currentLevel]);
+	}
+}
+
+function paintLevels(level)
+{
+	//console.log(level);
+	//var obstacle = level;
+	//world.ctx.fillRect(obstacle[0], obstacle[1], obstacle[2], obstacle[3]);
 }
 
 function burstEffect(x, y)
