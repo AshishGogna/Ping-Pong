@@ -176,19 +176,17 @@ function burstEffect(x, y)
 			console.log(x + " = " + windowWidth);
 
 			if (x > windowWidth/2)
-				var startX = x-30;
+				var startX = x-20;
 			else if (x < windowWidth/2)
-				var startX = x+30;
+				var startX = x+20;
 
 			var endX = x;
 
 			if (i < 10)
-			{
 				endY = y+10;
-			}
 
 			var startY = y;
-			var endY = y+30;
+			var endY = y+20;
 
 			var randX = getRandomInt(startX, endX);
 			var randY = getRandomInt(startY, endY);
@@ -199,7 +197,7 @@ function burstEffect(x, y)
 		particles.alpha = 1.0;
 	}
 	else
-		particles.alpha = particles.alpha - 0.08;
+		particles.alpha = particles.alpha - 0.07;
 
 
 	ctx.fillStyle = "rgba(59, 68, 75," + particles.alpha + ")";
@@ -208,11 +206,15 @@ function burstEffect(x, y)
 	{
 		var circle = particles.circles[i];
 
-		circle[0] -= 1;
+		if (ball.x > windowWidth/2)
+			circle[0] -= 0.3;
+		else if (ball.x < windowWidth/2)
+			circle[0] += 0.3;
+
 		if (ball.dy < 0)
-			circle[1] -= 1;
+			circle[1] -= 0.3;
 		else
-			circle[1] += 1;
+			circle[1] += 0.3;
 
 		var circleX = circle[0];
 		var circleY = circle[1];
