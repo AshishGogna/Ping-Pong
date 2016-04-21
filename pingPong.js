@@ -78,12 +78,15 @@ var ball = {
 var particles = {
 
     circles:[],
-	r: 2
+	r: 2,
+	alpha: 1.0
 }
 
 function moveObjects()
 {
 	world.ctx.clearRect(0, 10, windowWidth, windowHeight-20);
+
+	ctx.fillStyle = "rgba(59, 68, 75, 1.0)";
 
     //Paint the bars
     bars.leftBar[1] = world.mouseY-(100/2);
@@ -192,14 +195,29 @@ function burstEffect(x, y)
 
 			particles.circles.push([randX, randY]);
 		}
+
+		particles.alpha = 1.0;
 	}
+	else
+		particles.alpha = particles.alpha - 0.08;
+
+
+	ctx.fillStyle = "rgba(59, 68, 75," + particles.alpha + ")";
 
 	for (var i=0; i<particles.circles.length; i++)
 	{
 		var circle = particles.circles[i];
-		
+
+		circle[0] -= 1;
+		if (ball.dy < 0)
+			circle[1] -= 1;
+		else
+			circle[1] += 1;
+
 		var circleX = circle[0];
 		var circleY = circle[1];
+
+
 
 	    //Paint the ball
 	    world.ctx.beginPath();
@@ -207,6 +225,9 @@ function burstEffect(x, y)
 	    world.ctx.fill();
 	    world.ctx.closePath();
 	}
+
+	if (particles.alpha <= 0)
+		particles.circles = [];
 }
 
 function updateScore()
