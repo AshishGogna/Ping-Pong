@@ -55,7 +55,7 @@ world.setup = function()
 
 world.reset = function()
 {
-    location.reload();
+    //location.reload();
 }
 
 var bars = {
@@ -70,7 +70,15 @@ var ball = {
 	x: windowWidth/2-(10/2),
 	y: windowHeight/2-(10/2),
 	dx: 9,
-	dy: 9
+	dy: 9,
+	hitX:0,
+	hitY:0
+}
+
+var particles = {
+
+    circles:[],
+	r: 2
 }
 
 function moveObjects()
@@ -144,22 +152,70 @@ function detectCollision()
 				ball.dy = ball.dy-0.1;
 		}
 
-		burstEffect(ball.x, ball.y);
+		if (particles.circles.length == 0)
+			burstEffect(ball.x, ball.y);
 	}
 
 	//Ball's out
 	else if (ball.x > windowWidth || ball.x < 0)
 		world.reset();
+
+	if (particles.circles.length > 0)
+		burstEffect();
 }
 
 function burstEffect(x, y)
 {
-	console.log(x + " = " + y);
+	if (particles.circles.length == 0)
+	{
+		for (var i=0; i<20; i++)
+		{
+			console.log(x + " = " + windowWidth);
+
+			if (x > windowWidth/2)
+				var startX = x-30;
+			else if (x < windowWidth/2)
+				var startX = x+30;
+
+			var endX = x;
+
+			if (i < 10)
+			{
+				endY = y+10;
+			}
+
+			var startY = y;
+			var endY = y+30;
+
+			var randX = getRandomInt(startX, endX);
+			var randY = getRandomInt(startY, endY);
+
+			particles.circles.push([randX, randY]);
+		}
+	}
+
+	for (var i=0; i<particles.circles.length; i++)
+	{
+		var circle = particles.circles[i];
+		
+		var circleX = circle[0];
+		var circleY = circle[1];
+
+	    //Paint the ball
+	    world.ctx.beginPath();
+	    world.ctx.arc(circleX, circleY, particles.r, 0, Math.PI*2);
+	    world.ctx.fill();
+	    world.ctx.closePath();
+	}
 }
 
 function updateScore()
 {
 	$('#score').html(score);
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 //Animation function
