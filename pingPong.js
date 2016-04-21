@@ -208,7 +208,7 @@ function burstEffect(x, y)
 	{
 		var circle = particles.circles[i];
 
-		if (i < 10)
+		if (i > 10)
 		{
 			if (ball.x > windowWidth/2)
 				circle[0] -= 0.6;
@@ -231,8 +231,6 @@ function burstEffect(x, y)
 
 		var circleX = circle[0];
 		var circleY = circle[1];
-
-
 
 	    //Paint the ball
 	    world.ctx.beginPath();
