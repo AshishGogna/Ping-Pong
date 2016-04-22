@@ -10,6 +10,7 @@ var windowHeight = $(window).height();
 
 var gameStarted = 0;
 
+var lastScore = 0;
 var score = 0;
 
 //The World
@@ -55,7 +56,7 @@ world.setup = function()
 
 world.reset = function()
 {
-    location.reload();
+    //location.reload();
 }
 
 //The bars
@@ -88,10 +89,10 @@ var particles = {
 //Only one block
 var levels = {
 
-	lastLevel: 1,
-	currentLevel: 1,
+	levelUpdated: 0,
+	currentLevel: 0,
 	//0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-	levels: [[], [windowWidth/2-(5), windowHeight/2-(bars.leftBar[3]/2), 10, bars.leftBar[3]/2]]
+	levels: [[[]], [[windowWidth/2-(5), windowHeight/2-(bars.leftBar[3]/2), 10, bars.leftBar[3]/2]]]
 }
 
 function moveObjects()
@@ -149,6 +150,7 @@ function detectCollision()
 	if ((ball.x >= bars.rightBar[0]-5 && (ball.y>bars.rightBar[1] && ball.y<bars.rightBar[1]+bars.rightBar[3])) || (ball.x <= bars.leftBar[2]+5 && (ball.y>bars.leftBar[1] && ball.y<bars.leftBar[1]+bars.leftBar[3])))
 	{
 		ball.dx = -ball.dx;
+		lastScore = score;
 		score++;
 
 		if (Math.abs(ball.dx) < 17)
@@ -180,20 +182,24 @@ function detectCollision()
 	if (particles.circles.length > 0)
 		burstEffect();
 
-	if (score>0 && score%2 == 0)
+	if (score>0 && score%2 == 0 && levels.levelUpdated == 0)
 	{
 		levels.currentLevel++;
-
-		console.log(levels.currentLevel);
-		paintLevels(levels.levels[levels.currentLevel]);
+		levels.levelUpdated = 1;
 	}
+	paintLevels(levels.levels[levels.currentLevel]);
 }
 
 function paintLevels(level)
 {
-	//console.log(level);
-	//var obstacle = level;
-	//world.ctx.fillRect(obstacle[0], obstacle[1], obstacle[2], obstacle[3]);
+	if (lastScore == score)
+		levels.levelUpdated = 0;
+
+	for (var i=0; i<level.length; i++)
+	{
+		var obstacle = level[i];
+		world.ctx.fillRect(obstacle[0], obstacle[1], obstacle[2], obstacle[3]);
+	}
 }
 
 function burstEffect(x, y)
