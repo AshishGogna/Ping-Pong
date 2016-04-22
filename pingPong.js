@@ -56,7 +56,7 @@ world.setup = function()
 
 world.reset = function()
 {
-    location.reload();
+    //location.reload();
 }
 
 //The bars
@@ -93,7 +93,8 @@ var levels = {
 	levelUpdated: 0,
 	currentLevel: 0,
 	//0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-	levels: [ [[]], [[windowWidth/2-(5), windowHeight/2-100, 10, 200]], [[]] ]
+	levels: [ [[]], [[(windowWidth/3), windowHeight/2-50, 10, 100], [windowWidth-(windowWidth/3), windowHeight/2-50, 10, 100]], [[(windowWidth/3), (windowHeight/2-50)-100, 10, 100], [windowWidth-(windowWidth/3), (windowHeight/2-50)+100, 10, 100]], /*moving*/[[windowWidth/2, 0, bars.leftBar[2], bars.leftBar[3]]]/**/, [[(windowWidth/3), (windowHeight/2-50)+100, 10, 100], [windowWidth-(windowWidth/3), (windowHeight/2-50)-100, 10, 100]], [[(windowWidth/3), windowHeight-100, 10, 100], [windowWidth-(windowWidth/3), windowHeight-100, 10, 100]], [[(windowWidth/3), 0, 10, 100], [windowWidth-(windowWidth/3), 0, 10, 100]], [[(windowWidth/3), 0, 10, 100], [windowWidth-(windowWidth/3), windowHeight-100, 10, 100]], [[(windowWidth/3), windowHeight-100, 10, 100], [windowWidth-(windowWidth/3), 0, 10, 100]], [[windowWidth/2, 0, 10, 100], [windowWidth/2, windowHeight-100, 10, 100]] ]
+	//[[windowWidth/2-(5), windowHeight/2-50, 10, 100]]
 	//levels: [[[]], [[windowWidth/2-(5), windowHeight/2-(bars.leftBar[3]/2), 10, windowHeight]]]
 }
 
@@ -207,14 +208,15 @@ function detectCollision()
 	//Update level
 	if (levels.currentLevel<10)
 	{
-		if (score>0 && score%2 == 0 && levels.levelUpdated == 0)
+		if (score>0 && score%5 == 0 && levels.levelUpdated == 0)
 		{
-			console.log("CCCC");
 			levels.levelUpdated = 0;
 			levels.currentLevel++;
 			levels.levelUpdated = 1;
+
+			$('.popup').fadeIn(400).delay(500).fadeOut(400);
 		}
-		else if (score>0 && (score+1)%2 == 0)
+		else if (score>0 && (score+1)%5 == 0)
 		{
 
 			levels.levelUpdated = 0;
@@ -225,8 +227,16 @@ function detectCollision()
 
 function paintLevels(level)
 {
+	levels.levels[1][0][1] = bars.leftBar[1];
+
 	for (var i=0; i<level.length; i++)
 	{
+		if (i == 1)
+		{
+			//levels.levels[levels.currentLevel][i][0] = bars.leftBar[0];
+			//levels.levels[levels.currentLevel][i][1] = bars.leftBar[1];
+						
+		}
 		var obstacle = level[i];
 		world.ctx.fillRect(obstacle[0], obstacle[1], obstacle[2], obstacle[3]);
 	}
