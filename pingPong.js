@@ -74,6 +74,7 @@ var ball = {
 	y: windowHeight/2-(10/2),
 	dx: 9,
 	dy: 9,
+	bouncedFromObstacle: 0
 }
 
 //The particles
@@ -92,8 +93,8 @@ var levels = {
 	levelUpdated: 0,
 	currentLevel: 0,
 	//0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-	//levels: [[[]], [[windowWidth/2-(5), windowHeight/2-(bars.leftBar[3]/2), 10, bars.leftBar[3]/2]]]
-	levels: [[[]], [[windowWidth/2-(5), windowHeight/2-(bars.leftBar[3]/2), 10, windowHeight]]]
+	levels: [ [[]], [[windowWidth/2-(5), windowHeight/2-100, 10, 200]], [[]] ]
+	//levels: [[[]], [[windowWidth/2-(5), windowHeight/2-(bars.leftBar[3]/2), 10, windowHeight]]]
 }
 
 function moveObjects()
@@ -151,24 +152,29 @@ function detectCollision()
 	if ((ball.x >= bars.rightBar[0]-5 && (ball.y>bars.rightBar[1] && ball.y<bars.rightBar[1]+bars.rightBar[3])) || (ball.x <= bars.leftBar[2]+5 && (ball.y>bars.leftBar[1] && ball.y<bars.leftBar[1]+bars.leftBar[3])))
 	{
 		ball.dx = -ball.dx;
-		lastScore = score;
-		score++;
 
-		if (Math.abs(ball.dx) < 17)
+		if (ball.bouncedFromObstacle == 0)
 		{
-			if (ball.dx > 0)
-				ball.dx = ball.dx+0.2;
-			else
-				ball.dx = ball.dx-0.2;
+			score++;
+	
+			if (Math.abs(ball.dx) < 17)
+			{
+				if (ball.dx > 0)
+					ball.dx = ball.dx+0.2;
+				else
+					ball.dx = ball.dx-0.2;
+			}
+
+			if (Math.abs(ball.dy) < 17)
+			{
+				if (ball.dy > 0)
+					ball.dy = ball.dy+0.2;
+				else
+					ball.dy = ball.dy-0.2;
+			}
 		}
 
-		if (Math.abs(ball.dy) < 17)
-		{
-			if (ball.dy > 0)
-				ball.dy = ball.dy+0.2;
-			else
-				ball.dy = ball.dy-0.2;
-		}
+		ball.bouncedFromObstacle = 0;
 
 		//if (particles.circles.length == 0)
 			//burstEffect(ball.x, ball.y);
@@ -188,29 +194,37 @@ function detectCollision()
 		var width = obstacle[2];
 		var height = obstacle[3];
 
-		if ((ball.x>x-5 && ball.x<x+5) && (ball.y>y && ball.y<height))
+		if ((ball.x>x-5 && ball.x<x+width+10) && (ball.y>=y && ball.y<=y+height))
 		{
 			ball.dx = -ball.dx;
-			//ball.dy = -ball.dy;
+			ball.bouncedFromObstacle = 1;
 		}
 	}
 
 	if (particles.circles.length > 0)
 		burstEffect();
 
-	if (score>0 && score%2 == 0 && levels.levelUpdated == 0)
+	//Update level
+	if (levels.currentLevel<10)
 	{
-		levels.currentLevel++;
-		levels.levelUpdated = 1;
+		if (score>0 && score%2 == 0 && levels.levelUpdated == 0)
+		{
+			console.log("CCCC");
+			levels.levelUpdated = 0;
+			levels.currentLevel++;
+			levels.levelUpdated = 1;
+		}
+		else if (score>0 && (score+1)%2 == 0)
+		{
+
+			levels.levelUpdated = 0;
+		}
+		paintLevels(levels.levels[levels.currentLevel]);
 	}
-	paintLevels(levels.levels[levels.currentLevel]);
 }
 
 function paintLevels(level)
 {
-	if (lastScore == score)
-		levels.levelUpdated = 0;
-
 	for (var i=0; i<level.length; i++)
 	{
 		var obstacle = level[i];
