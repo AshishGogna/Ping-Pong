@@ -56,7 +56,7 @@ world.setup = function()
 
 world.reset = function()
 {
-    //location.reload();
+    location.reload();
 }
 
 //The bars
@@ -93,7 +93,7 @@ var levels = {
 	levelUpdated: 0,
 	currentLevel: 0,
 	//0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-	levels: [ [[]], [[(windowWidth/3), windowHeight/2-50, 10, 100], [windowWidth-(windowWidth/3), windowHeight/2-50, 10, 100]], [[(windowWidth/3), (windowHeight/2-50)-100, 10, 100], [windowWidth-(windowWidth/3), (windowHeight/2-50)+100, 10, 100]], /*moving*/[[windowWidth/2, 0, bars.leftBar[2], bars.leftBar[3]]]/**/, [[(windowWidth/3), (windowHeight/2-50)+100, 10, 100], [windowWidth-(windowWidth/3), (windowHeight/2-50)-100, 10, 100]], [[(windowWidth/3), windowHeight-100, 10, 100], [windowWidth-(windowWidth/3), windowHeight-100, 10, 100]], [[(windowWidth/3), 0, 10, 100], [windowWidth-(windowWidth/3), 0, 10, 100]], [[(windowWidth/3), 0, 10, 100], [windowWidth-(windowWidth/3), windowHeight-100, 10, 100]], [[(windowWidth/3), windowHeight-100, 10, 100], [windowWidth-(windowWidth/3), 0, 10, 100]], [[windowWidth/2, 0, 10, 100], [windowWidth/2, windowHeight-100, 10, 100]] ]
+	levels: [ [[]], [[(windowWidth/3), windowHeight/2-50, 10, 100], [windowWidth-(windowWidth/3), windowHeight/2-50, 10, 100]], [[(windowWidth/3), (windowHeight/2-50)-100, 10, 100], [windowWidth-(windowWidth/3), (windowHeight/2-50)+100, 10, 100]], [[(windowWidth/3), (windowHeight/2-50)+100, 10, 100], [windowWidth-(windowWidth/3), (windowHeight/2-50)-100, 10, 100]], [[(windowWidth/3), windowHeight-100, 10, 100], [windowWidth-(windowWidth/3), windowHeight-100, 10, 100]], [[(windowWidth/3), 0, 10, 100], [windowWidth-(windowWidth/3), 0, 10, 100]], [[(windowWidth/3), 0, 10, 100], [windowWidth-(windowWidth/3), windowHeight-100, 10, 100]], [[(windowWidth/3), windowHeight-100, 10, 100], [windowWidth-(windowWidth/3), 0, 10, 100]], [[windowWidth/2, 0, 10, 100], [windowWidth/2, windowHeight-100, 10, 100]], /*moving*/[[windowWidth/2, 0, bars.leftBar[2], bars.leftBar[3]]]/**/ ]
 	//[[windowWidth/2-(5), windowHeight/2-50, 10, 100]]
 	//levels: [[[]], [[windowWidth/2-(5), windowHeight/2-(bars.leftBar[3]/2), 10, windowHeight]]]
 }
@@ -161,17 +161,17 @@ function detectCollision()
 			if (Math.abs(ball.dx) < 17)
 			{
 				if (ball.dx > 0)
-					ball.dx = ball.dx+0.2;
+					ball.dx = ball.dx+0.1;
 				else
-					ball.dx = ball.dx-0.2;
+					ball.dx = ball.dx-0.1;
 			}
 
 			if (Math.abs(ball.dy) < 17)
 			{
 				if (ball.dy > 0)
-					ball.dy = ball.dy+0.2;
+					ball.dy = ball.dy+0.1;
 				else
-					ball.dy = ball.dy-0.2;
+					ball.dy = ball.dy-0.1;
 			}
 		}
 
@@ -214,6 +214,7 @@ function detectCollision()
 			levels.currentLevel++;
 			levels.levelUpdated = 1;
 
+			$('.popup').html("Level " + levels.currentLevel);
 			$('.popup').fadeIn(400).delay(500).fadeOut(400);
 		}
 		else if (score>0 && (score+1)%5 == 0)
@@ -227,7 +228,7 @@ function detectCollision()
 
 function paintLevels(level)
 {
-	levels.levels[1][0][1] = bars.leftBar[1];
+	levels.levels[9][0][1] = bars.leftBar[1];
 
 	for (var i=0; i<level.length; i++)
 	{
@@ -349,7 +350,11 @@ $(document).ready(function () {
    	//Mouse click
 	$("#gameDiv").click(function(){
 
+			$('.popup').html("Level " + levels.currentLevel);
+			$('.popup').fadeIn(400).delay(500).fadeOut(400);
+
 	    gameStarted = 1;
+
 	});
 
 	world.setup();
