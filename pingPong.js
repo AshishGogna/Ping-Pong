@@ -56,7 +56,15 @@ world.setup = function()
 
 world.reset = function()
 {
-    location.reload();
+	score = 0;
+
+	ball.dx = 9;
+	ball.dy = 9;
+
+	levels.currentLevel = 0;
+	levels.levelUpdated = 0;
+
+	gameStarted = 0;
 }
 
 //The bars
@@ -214,14 +222,15 @@ function detectCollision()
 			levels.currentLevel++;
 			levels.levelUpdated = 1;
 
-			$('.popup').html("Level " + levels.currentLevel);
-			$('.popup').fadeIn(400).delay(500).fadeOut(400);
+			var levelToShow = levels.currentLevel;
+			levelToShow++;
+			showPopup("Level " + levelToShow);
 		}
 		else if (score>0 && (score+1)%5 == 0)
 		{
-
 			levels.levelUpdated = 0;
 		}
+
 		paintLevels(levels.levels[levels.currentLevel]);
 	}
 }
@@ -232,12 +241,6 @@ function paintLevels(level)
 
 	for (var i=0; i<level.length; i++)
 	{
-		if (i == 1)
-		{
-			//levels.levels[levels.currentLevel][i][0] = bars.leftBar[0];
-			//levels.levels[levels.currentLevel][i][1] = bars.leftBar[1];
-						
-		}
 		var obstacle = level[i];
 		world.ctx.fillRect(obstacle[0], obstacle[1], obstacle[2], obstacle[3]);
 	}
@@ -329,6 +332,12 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function showPopup(text)
+{
+	$('.popup').html(text);
+	$('.popup').fadeIn(400).delay(500).fadeOut(400);
+}
+
 //Animation function
 window.requestAnimFrame = (function(callback) {
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
@@ -350,8 +359,8 @@ $(document).ready(function () {
    	//Mouse click
 	$("#gameDiv").click(function(){
 
-			$('.popup').html("Level " + levels.currentLevel);
-			$('.popup').fadeIn(400).delay(500).fadeOut(400);
+			var levelToShow = 1;
+			showPopup("Level " + levelToShow);
 
 	    gameStarted = 1;
 
