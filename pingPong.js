@@ -69,10 +69,22 @@ world.reset = function()
 		levels.currentLevel = 0;
 		levels.levelUpdated = 0;
 
+		showPopup("Game Over");
+
+		var delay=800;
+		setTimeout(function() {
+
+			var name = prompt("Game's Over.\nYour Score = " + score + ".\nPlease enter your name", "Name");
+			if (name != null) {
+				console.log(name);
+			}
+
+		}, delay);
+
+		$(".gameDivBG").css("display", "block");
+
 		score = 0;
 		lives = 5;
-
-		showPopup("Game Over");
 	}
 
 	gameStarted = 0;
@@ -385,6 +397,9 @@ $(document).ready(function () {
 
 		var levelToShow = 1;
 		showPopup("Level " + levelToShow);
+
+		$(".gameDivBG").css("display", "none");
+
 	    gameStarted = 1;
 	});
 
