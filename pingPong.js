@@ -71,20 +71,28 @@ world.reset = function()
 
 		showPopup("Game Over");
 
-		var delay=800;
-		setTimeout(function() {
+		var username = localStorage['username'] || '';
 
-			var name = prompt("Game's Over.\nYour Score = " + score + ".\nPlease enter your name", "Name");
-			if (name != null) {
-				console.log(name);
-			}
+		console.log(username);
 
-		}, delay);
+		if (username == "")
+		{
+			var delay=800;
+			setTimeout(function() {
+
+				var name = prompt("Game's Over.\nYour Score = " + score + ".\nPlease enter your name", "Name");
+				if (name != null) {
+
+					localStorage['username'] = name;
+				}
+
+			}, delay);
+		}
 
 		$(".gameDivBG").css("display", "block");
 
 		score = 0;
-		lives = 5;
+		lives = 3;
 	}
 
 	gameStarted = 0;
