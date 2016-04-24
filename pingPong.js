@@ -13,6 +13,8 @@ var gameStarted = 0;
 var lastScore = 0;
 var score = 0;
 
+var lives = 3;
+
 //The World
 var world = {
     ctx:null,
@@ -56,15 +58,26 @@ world.setup = function()
 
 world.reset = function()
 {
-	score = 0;
+
+	lives--;
 
 	ball.dx = 9;
 	ball.dy = 9;
 
-	levels.currentLevel = 0;
-	levels.levelUpdated = 0;
+	if (lives == 0)
+	{
+		levels.currentLevel = 0;
+		levels.levelUpdated = 0;
+
+		score = 0;
+		lives = 5;
+
+		showPopup("Game Over");
+	}
 
 	gameStarted = 0;
+
+	showLives();
 }
 
 //The bars
@@ -169,17 +182,17 @@ function detectCollision()
 			if (Math.abs(ball.dx) < 17)
 			{
 				if (ball.dx > 0)
-					ball.dx = ball.dx+0.1;
+					ball.dx = ball.dx+0.2;
 				else
-					ball.dx = ball.dx-0.1;
+					ball.dx = ball.dx-0.2;
 			}
 
 			if (Math.abs(ball.dy) < 17)
 			{
 				if (ball.dy > 0)
-					ball.dy = ball.dy+0.1;
+					ball.dy = ball.dy+0.2;
 				else
-					ball.dy = ball.dy-0.1;
+					ball.dy = ball.dy-0.2;
 			}
 		}
 
@@ -338,6 +351,15 @@ function showPopup(text)
 	$('.popup').fadeIn(400).delay(500).fadeOut(400);
 }
 
+function showLives()
+{
+	$(".lives").html("");
+	for (var i=1; i<=lives; i++)
+	{
+		$( ".lives" ).append("<img src=\"images/life.png\"></img>");
+	}
+}
+
 //Animation function
 window.requestAnimFrame = (function(callback) {
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
@@ -356,14 +378,14 @@ $(document).mousemove(function(e) {
 //Document onload function
 $(document).ready(function () {
 
+	showLives();
+
    	//Mouse click
 	$("#gameDiv").click(function(){
 
-			var levelToShow = 1;
-			showPopup("Level " + levelToShow);
-
+		var levelToShow = 1;
+		showPopup("Level " + levelToShow);
 	    gameStarted = 1;
-
 	});
 
 	world.setup();

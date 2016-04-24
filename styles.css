@@ -82,3 +82,22 @@ body
 	-moz-box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.35);
 	box-shadow: 0px 0px 20px 1px rgba(0,0,0,0.35);
 }
+.lives
+{
+	width: 180px;
+	height: 30px;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	margin-left: -90px;
+	margin-top: 90px;
+	text-align: center;
+}
+.lives img
+{
+
+	width: 20px;
+	height: 20px;
+	margin-top: 2.5px;
+	padding: 5px;
+}
